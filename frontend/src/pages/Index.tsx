@@ -25,8 +25,8 @@ const Index = () => {
     (d) => filter === "all" || d.type === filter
   );
 
-  const wildlifeCount = detections.filter((d) => d.type === "wildlife").length;
-  const intruderCount = detections.filter((d) => d.type === "intruder").length;
+  const wildlifeCount = detections.filter((d) => d.category === "wildlife").length;
+  const intruderCount = detections.filter((d) => d.category === "intruder").length;
   const speciesCount = new Set(detections.map((d) => d.species).filter(Boolean)).size;
 
   useEffect(() => {
