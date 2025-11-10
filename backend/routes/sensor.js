@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const SensorData = require('../models/SensorData');
+const Detection = require('../models/Detection');
+require('dotenv').config();
 
 // POST - Add new sensor reading
 router.post('/data', async (req, res) => {
   try {
-    const newReading = new SensorData(req.body);
+    const newReading = new Detection(req.body);
     const savedReading = await newReading.save();
     res.status(201).json(savedReading);
   } catch (error) {
@@ -16,7 +17,7 @@ router.post('/data', async (req, res) => {
 // GET - Get all sensor data
 router.get('/data', async (req, res) => {
   try {
-    const data = await SensorData.find()
+    const data = await Detection.find()
       .sort({ timestamp: -1 })
       .limit(100);
     res.json(data);
@@ -28,7 +29,7 @@ router.get('/data', async (req, res) => {
 // GET - Get data by device ID
 router.get('/data/:deviceId', async (req, res) => {
   try {
-    const data = await SensorData.find({ 
+    const data = await Detection.find({ 
       deviceId: req.params.deviceId 
     }).sort({ timestamp: -1 });
     res.json(data);
@@ -40,7 +41,7 @@ router.get('/data/:deviceId', async (req, res) => {
 // GET - Get latest reading
 router.get('/data/latest/:deviceId', async (req, res) => {
   try {
-    const data = await SensorData.findOne({ 
+    const data = await Detection.findOne({ 
       deviceId: req.params.deviceId 
     }).sort({ timestamp: -1 });
     res.json(data);

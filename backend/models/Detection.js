@@ -45,4 +45,4 @@ const sensorDetectionSchema = new mongoose.Schema({
   timestamps: true // Adds createdAt and updatedAt automatically
 });
 
-module.exports = mongoose.model('SensorData', sensorDetectionSchema);
+module.exports = mongoose.model('Detection', sensorDetectionSchema);
