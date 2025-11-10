@@ -2,10 +2,10 @@
   "name": "life-patrol",
   "version": "1.0.0",
   "description": "![Owl](https://upload.wikimedia.org/wikipedia/commons/2/20/Bubo_bubo_1_%28Martin_Mecnarowski%29.jpg)",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon server.js"
+    "devStart": "cd backend && nodemon server.js"
   },
   "repository": {
     "type": "git",

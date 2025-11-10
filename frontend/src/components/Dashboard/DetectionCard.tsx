@@ -44,7 +44,7 @@ export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) =
             )}
           </div>
           <div className="text-xs text-muted-foreground">
-            {Math.round(detection.confidence * 100)}% confidence
+            {Math.round(detection.confidence)}% confidence
           </div>
         </div>
 
