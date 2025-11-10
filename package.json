@@ -1,0 +1,31 @@
+{
+  "name": "life-patrol",
+  "version": "1.0.0",
+  "description": "![Owl](https://upload.wikimedia.org/wikipedia/commons/2/20/Bubo_bubo_1_%28Martin_Mecnarowski%29.jpg)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "devStart": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gonzalodom11/life-patrol.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/gonzalodom11/life-patrol/issues"
+  },
+  "homepage": "https://github.com/gonzalodom11/life-patrol#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "mongoose": "^8.19.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
