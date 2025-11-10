@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Detection = require('../models/Detection');
+const User = require('../models/User');
 require('dotenv').config();
 
 // POST - Add new sensor reading

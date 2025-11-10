@@ -40,7 +40,10 @@ const sensorDetectionSchema = new mongoose.Schema({
     type: String,
     enum: ['wildlife', 'intruder', 'other'],
     default: 'wildlife'
-  }
+  },
+  imageUrl: {
+    type: String
+  },
 }, {
   timestamps: true // Adds createdAt and updatedAt automatically
 });
