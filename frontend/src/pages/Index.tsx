@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { mockDetections, mockSystemStatus } from "@/lib/mockData";
 import { Detection, DetectionType } from "@/types/detection";
 import { StatsCard } from "@/components/Dashboard/StatsCard";
@@ -9,9 +9,13 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, AlertTriangle, Leaf, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
+import { set } from "date-fns";
+import { get } from "http";
+import { useQuery } from '@tanstack/react-query';
+import { getDetections } from '@/lib/api';
 
 const Index = () => {
-  const [detections, setDetections] = useState<Detection[]>(mockDetections);
+  const [detections, setDetections] = useState([]);
   const [systemStatus, setSystemStatus] = useState(mockSystemStatus);
   const [selectedDetection, setSelectedDetection] = useState<Detection | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -24,6 +28,13 @@ const Index = () => {
   const wildlifeCount = detections.filter((d) => d.type === "wildlife").length;
   const intruderCount = detections.filter((d) => d.type === "intruder").length;
   const speciesCount = new Set(detections.map((d) => d.species).filter(Boolean)).size;
+
+  useEffect(() => {
+  getDetections()
+    .then(setDetections)
+    .catch(err => console.error('Error retrieving detections', err));
+}, []);
+
 
   const handleToggleSystem = (armed: boolean) => {
     setSystemStatus({ ...systemStatus, armed });

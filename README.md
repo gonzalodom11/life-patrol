@@ -1,6 +1,6 @@
 # 🦉 Smart Wildlife & Intruder Detection System
 
-![Owl](https://upload.wikimedia.org/wikipedia/commons/2/20/Bubo_bubo_1_%28Martin_Mecnarowski%29.jpg)
+![LifePatrol logo](frontend/public/life-patrol-logo.png)
 
 > **Unified IoT Project — Sustainability Blocked Week**  
 > **UN Goals:** 15 – Life on Land · 11 – Sustainable Cities · 16 – Peace, Justice and Strong Institutions  
