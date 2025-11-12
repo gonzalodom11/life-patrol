@@ -5,17 +5,13 @@ import { StatsCard } from "@/components/Dashboard/StatsCard";
 import { DetectionCard } from "@/components/Dashboard/DetectionCard";
 import { SystemToggle } from "@/components/Dashboard/SystemToggle";
 import { SpeciesTagDialog } from "@/components/Dashboard/SpeciesTagDialog";
-import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Camera, AlertTriangle, Leaf, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
-import { set } from "date-fns";
-import { get } from "http";
-import { useQuery } from '@tanstack/react-query';
 import { getDetections, getTags } from '@/lib/api';
 
 const Index = () => {
-  const [detections, setDetections] = useState([]);
+  const [detections, setDetections] = useState<Detection[]>([]);
   const [species, setSpecies] = useState<string[]>([]);
   const [systemStatus, setSystemStatus] = useState(mockSystemStatus);
   const [selectedDetection, setSelectedDetection] = useState<Detection | null>(null);
@@ -34,8 +30,14 @@ const Index = () => {
   const fetchDetections = async () => {
     try {
       const data = await getDetections();
-      data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-      setDetections(data);
+      // Backend already sorts by timestamp DESC, but we sort client-side
+      // as a safeguard to ensure consistent chronological ordering
+      const sorted = (data || []).slice().sort((a, b) => {
+        const aDate = new Date(a.timestamp).getTime();
+        const bDate = new Date(b.timestamp).getTime();
+        return bDate - aDate; // newest first
+      });
+      setDetections(sorted);
     } catch (err) {
       console.error('Error retrieving detections', err);
     }
@@ -141,7 +143,7 @@ const Index = () => {
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredDetections.map((detection) => (
               <DetectionCard
-                key={detection.id}
+                key={detection._id}
                 detection={detection}
                 onTagSpecies={handleTagSpecies}
               />

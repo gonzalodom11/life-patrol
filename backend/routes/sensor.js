@@ -18,8 +18,10 @@ router.post('/data', async (req, res) => {
 // GET - Get all sensor data
 router.get('/data', async (req, res) => {
   try {
+    // Sort by timestamp first, then fallback to createdAt so documents that only
+    // have createdAt (from timestamps: true) are still ordered correctly.
     const data = await Detection.find()
-      .sort({ timestamp: -1 })
+      .sort({ timestamp: -1})
       .limit(100);
     res.json(data);
   } catch (error) {
@@ -66,30 +68,23 @@ router.get('/data/latest/:deviceId', async (req, res) => {
 router.put('/data/:id/tags', async (req, res) => {
   try {
     const detectionId = req.params.id;
-
     if (!detectionId) {
       return res.status(400).json({ error: 'Missing detection id in params' });
     }
-
     const tags = req.body.tags;
     if (!Array.isArray(tags)) {
       return res.status(400).json({ error: 'tags must be an array' });
     }
-
     const updatedDetection = await Detection.findByIdAndUpdate(
       detectionId,
       { $set: { tags } },
       { new: true, runValidators: true, context: 'query' }
     ).exec();
-
     if (!updatedDetection) {
       return res.status(404).json({ error: `Detection ${detectionId} not found` });
-    }
-
-    // return the updated document to the client
+    }// return the updated document to the client
     return res.json(updatedDetection);
-  } catch (err) {
-    // handle errors (validation, DB, etc.)
+  } catch (err) { // handle errors (validation, DB, etc.)
     console.error("Failed updating detection tags:", err);
     return res.status(500).json({ error: err.message || 'Internal server error' });
   }

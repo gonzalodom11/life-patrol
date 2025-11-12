@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Camera, Thermometer, Droplets, Tag } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
+import { time } from "console";
 
 interface DetectionCardProps {
   detection: Detection;
@@ -32,10 +33,10 @@ export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) =
       <div className="p-4 space-y-3">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-sm font-medium flex items-center gap-2">
+            <div className="text-sm font-medium flex items-center gap-2">
               <Camera className="h-4 w-4" />
-              {formatDistanceToNow(detection.timestamp, { addSuffix: true })}
-            </p>
+                {formatDistanceToNow(new Date(detection.timestamp), { addSuffix: true })}
+            </div>
             {detection.tags && (
               <p className="text-sm text-muted-foreground flex items-center gap-2">
                 <Tag className="h-3 w-3" />
