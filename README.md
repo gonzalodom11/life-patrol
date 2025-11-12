@@ -43,9 +43,8 @@ The platform aims to help local communities and researchers:
 | **Hardware** | Raspberry Pi / ESP32, PIR sensor, camera |
 | **Backend** | Node.js, Express, MQTT (optional) |
 | **Database** | MongoDB (+ InfluxDB for time-series data) |
-| **Frontend** | Angular, Plotly.js / D3.js |
+| **Frontend** | React |
 | **ML / AI** | TensorFlow Lite (cat/dog/bird/human model) |
-| **Visualization** | Grafana dashboard for metrics overview |
 
 ## 🌐 Sustainability Goals Alignment
 
