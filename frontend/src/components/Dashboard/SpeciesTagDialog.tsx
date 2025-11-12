@@ -11,6 +11,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { updateDetectionTags } from '@/lib/api';
+import { toast } from "sonner";
 
 interface SpeciesTagDialogProps {
   detection: Detection | null;
@@ -22,10 +24,15 @@ interface SpeciesTagDialogProps {
 export const SpeciesTagDialog = ({ detection, open, onClose, onSave }: SpeciesTagDialogProps) => {
   const [species, setSpecies] = useState("");
 
-  const handleSave = () => {
-    if (species.trim()) {
+  const handleSave = async () => {
+    try {
+      const list_species = species.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      const updatedDetection = await updateDetectionTags(detection!._id, list_species);
+      // example: notify parent / update local state
       onSave(species);
-      setSpecies("");
+    } catch (err) {
+      console.error('Failed saving species', err);
+      toast.error('Failed to save species');
     }
   };
 

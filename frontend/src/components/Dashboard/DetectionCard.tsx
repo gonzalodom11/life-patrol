@@ -13,7 +13,7 @@ interface DetectionCardProps {
 export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) => {
   const typeColors = {
     wildlife: "bg-primary text-primary-foreground",
-    intruder: "bg-accent text-accent-foreground",
+    intruder: "bg-orange-600 text-primary-foreground",
     unknown: "bg-muted text-muted-foreground",
   };
 
@@ -25,8 +25,8 @@ export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) =
           alt="Detection"
           className="h-full w-full object-cover transition-transform hover:scale-105"
         />
-        <Badge className={`absolute top-3 right-3 ${typeColors[detection.type]}`}>
-          {detection.type}
+        <Badge className={`absolute top-3 right-3 ${typeColors[detection.category]}`}>
+          {detection.category.charAt(0).toUpperCase() + detection.category.slice(1)}
         </Badge>
       </div>
       <div className="p-4 space-y-3">
@@ -36,10 +36,10 @@ export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) =
               <Camera className="h-4 w-4" />
               {formatDistanceToNow(detection.timestamp, { addSuffix: true })}
             </p>
-            {detection.species && (
+            {detection.tags && (
               <p className="text-sm text-muted-foreground flex items-center gap-2">
                 <Tag className="h-3 w-3" />
-                {detection.species}
+                {detection.tags.join(", ")}
               </p>
             )}
           </div>
@@ -65,14 +65,14 @@ export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) =
           </div>
         )}
 
-        {!detection.species && detection.type === "wildlife" && (
+        {detection.tags.length === 0 && detection.category === "wildlife" && (
           <Button
             variant="outline"
             size="sm"
-            className="w-full"
+            className="w-full border-orange-400"
             onClick={() => onTagSpecies?.(detection)}
           >
-            <Tag className="h-4 w-4 mr-2" />
+            <Tag className="h-4 w-4 mr-2 " />
             Tag Species
           </Button>
         )}
