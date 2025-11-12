@@ -27,6 +27,17 @@ router.get('/data', async (req, res) => {
   }
 });
 
+// GET - Get unique tags per category
+router.get('/tags/:category', async (req, res) => {
+  try {
+    const category = req.params.category; // 'wildlife', 'intruder', or 'other'
+    const tags = await Detection.distinct('tags', { category });
+    res.json(tags);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  } 
+});
+
 // GET - Get data by device ID
 router.get('/data/:deviceId', async (req, res) => {
   try {

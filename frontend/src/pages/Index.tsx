@@ -12,10 +12,11 @@ import { toast } from "sonner";
 import { set } from "date-fns";
 import { get } from "http";
 import { useQuery } from '@tanstack/react-query';
-import { getDetections } from '@/lib/api';
+import { getDetections, getTags } from '@/lib/api';
 
 const Index = () => {
   const [detections, setDetections] = useState([]);
+  const [species, setSpecies] = useState<string[]>([]);
   const [systemStatus, setSystemStatus] = useState(mockSystemStatus);
   const [selectedDetection, setSelectedDetection] = useState<Detection | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -27,13 +28,16 @@ const Index = () => {
 
   const wildlifeCount = detections.filter((d) => d.category === "wildlife").length;
   const intruderCount = detections.filter((d) => d.category === "intruder").length;
-  const speciesCount = new Set(detections.map((d) => d.species).filter(Boolean)).size;
+  const speciesCount = new Set(species).size;
 
   useEffect(() => {
-  getDetections()
-    .then(setDetections)
-    .catch(err => console.error('Error retrieving detections', err));
-}, []);
+    getDetections()
+      .then(setDetections)
+      .catch(err => console.error('Error retrieving detections', err));
+    getTags('wildlife')
+      .then(setSpecies)
+      .catch(err => console.error('Error retrieving species tags', err));
+  }, []);
 
 
   const handleToggleSystem = (armed: boolean) => {
@@ -66,13 +70,13 @@ const Index = () => {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              
-                {/* Use the public asset at /life-patrol-logo.png — Vite serves files in public/ at root */}
-                <img
-                  src="/life-patrol-logo.png"
-                  alt="LifePatrol logo"
-                  className="h-10 w-10 object-contain"
-                />
+
+              {/* Use the public asset at /life-patrol-logo.png — Vite serves files in public/ at root */}
+              <img
+                src="/life-patrol-logo.png"
+                alt="LifePatrol logo"
+                className="h-10 w-10 object-contain"
+              />
               <div>
                 <h1 className="text-2xl font-bold">LifePatrol Monitor</h1>
                 <p className="text-sm text-muted-foreground">

@@ -25,8 +25,14 @@ export async function getLatestByDevice(deviceId: string): Promise<Detection | n
   return handleRes<Detection | null>(res);
 }
 
+export async function getTags(category: string): Promise<string[]> {
+  const res = await fetch(`${API_BASE}/api/sensor/tags/${encodeURIComponent(category)}`);
+  return handleRes<string[]>(res);
+}
+
 export default {
   getDetections,
   getDetectionsByDevice,
   getLatestByDevice,
+  getTags,
 };
