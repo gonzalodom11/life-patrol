@@ -1,11 +1,11 @@
-export type DetectionType = "wildlife" | "intruder" | "unknown";
+export type DetectionCategory = "wildlife" | "intruder" | "unknown";
 
 export interface Detection {
-  id: string;
+  _id: string;
   timestamp: Date;
-  type: DetectionType;
+  category: DetectionCategory;
   imageUrl: string;
-  species?: string;
+  tags?: string[];
   confidence: number;
   temperature?: number;
   humidity?: number;

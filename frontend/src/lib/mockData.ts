@@ -2,7 +2,7 @@ import { Detection, SystemStatus } from "@/types/detection";
 
 export const mockDetections: Detection[] = [
   {
-    id: "1",
+    _id: "1",
     timestamp: new Date(Date.now() - 1000 * 60 * 5),
     type: "wildlife",
     imageUrl: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?w=400",
@@ -12,7 +12,7 @@ export const mockDetections: Detection[] = [
     humidity: 65,
   },
   {
-    id: "2",
+    _id: "2",
     timestamp: new Date(Date.now() - 1000 * 60 * 30),
     type: "wildlife",
     imageUrl: "https://images.unsplash.com/photo-1552053831-71594a27632d?w=400",
@@ -22,7 +22,7 @@ export const mockDetections: Detection[] = [
     humidity: 68,
   },
   {
-    id: "3",
+    _id: "3",
     timestamp: new Date(Date.now() - 1000 * 60 * 60),
     type: "intruder",
     imageUrl: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
@@ -31,7 +31,7 @@ export const mockDetections: Detection[] = [
     humidity: 70,
   },
   {
-    id: "4",
+    _id: "4",
     timestamp: new Date(Date.now() - 1000 * 60 * 90),
     type: "wildlife",
     imageUrl: "https://images.unsplash.com/photo-1552728089-57bdde30beb3?w=400",
@@ -41,7 +41,7 @@ export const mockDetections: Detection[] = [
     humidity: 72,
   },
   {
-    id: "5",
+    _id: "5",
     timestamp: new Date(Date.now() - 1000 * 60 * 120),
     type: "wildlife",
     imageUrl: "https://images.unsplash.com/photo-1425082661705-1834bfd09dca?w=400",

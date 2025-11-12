@@ -30,9 +30,21 @@ export async function getTags(category: string): Promise<string[]> {
   return handleRes<string[]>(res);
 }
 
+export async function updateDetectionTags(detectionId: string, tags: string[]): Promise<Detection> {
+  const res = await fetch(`${API_BASE}/api/sensor/data/${encodeURIComponent(detectionId)}/tags`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ tags }),
+  });
+  return handleRes<Detection>(res);
+}
+
 export default {
   getDetections,
   getDetectionsByDevice,
   getLatestByDevice,
   getTags,
+  updateDetectionTags,
 };

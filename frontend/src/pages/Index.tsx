@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { mockDetections, mockSystemStatus } from "@/lib/mockData";
-import { Detection, DetectionType } from "@/types/detection";
+import { Detection, DetectionCategory } from "@/types/detection";
 import { StatsCard } from "@/components/Dashboard/StatsCard";
 import { DetectionCard } from "@/components/Dashboard/DetectionCard";
 import { SystemToggle } from "@/components/Dashboard/SystemToggle";
@@ -20,20 +20,29 @@ const Index = () => {
   const [systemStatus, setSystemStatus] = useState(mockSystemStatus);
   const [selectedDetection, setSelectedDetection] = useState<Detection | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [filter, setFilter] = useState<DetectionType | "all">("all");
+  const [filter, setFilter] = useState<DetectionCategory | "all">("all");
 
   const filteredDetections = detections.filter(
-    (d) => filter === "all" || d.type === filter
+    (d) => filter === "all" || d.category === filter
   );
 
   const wildlifeCount = detections.filter((d) => d.category === "wildlife").length;
   const intruderCount = detections.filter((d) => d.category === "intruder").length;
   const speciesCount = new Set(species).size;
 
+  
+  const fetchDetections = async () => {
+    try {
+      const data = await getDetections();
+      data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+      setDetections(data);
+    } catch (err) {
+      console.error('Error retrieving detections', err);
+    }
+  };
+
   useEffect(() => {
-    getDetections()
-      .then(setDetections)
-      .catch(err => console.error('Error retrieving detections', err));
+    fetchDetections();
     getTags('wildlife')
       .then(setSpecies)
       .catch(err => console.error('Error retrieving species tags', err));
@@ -50,18 +59,16 @@ const Index = () => {
     setDialogOpen(true);
   };
 
-  const handleSaveSpecies = (species: string) => {
+  const handleSaveSpecies = async (species: string) => {
     if (selectedDetection) {
-      setDetections(
-        detections.map((d) =>
-          d.id === selectedDetection.id ? { ...d, species } : d
-        )
-      );
+      // re-fetch detections to get the latest data after tagging
+      await fetchDetections();
       toast.success("Species tagged successfully");
     }
     setDialogOpen(false);
     setSelectedDetection(null);
   };
+  
 
   return (
     <div className="min-h-screen bg-gradient-earth">
@@ -122,7 +129,7 @@ const Index = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold">Recent Detections</h2>
-            <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)}>
+            <Tabs value={filter} onValueChange={(v) => setFilter(v as DetectionCategory | "all")}>
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="wildlife">Wildlife</TabsTrigger>
