@@ -105,7 +105,7 @@ const Index = () => {
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <StatsCard
             title="Total Detections"
-            value={systemStatus.totalDetections}
+            value={detections.length}
             icon={Camera}
             trend="+12% from last week"
           />
