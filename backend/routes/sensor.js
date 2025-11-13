@@ -18,8 +18,6 @@ router.post('/data', async (req, res) => {
 // GET - Get all sensor data
 router.get('/data', async (req, res) => {
   try {
-    // Sort by timestamp first, then fallback to createdAt so documents that only
-    // have createdAt (from timestamps: true) are still ordered correctly.
     const data = await Detection.find()
       .sort({ timestamp: -1})
       .limit(100);
