@@ -15,4 +15,20 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Disable minification features that might use eval
+    minify: 'esbuild',
+    sourcemap: false, // Disable sourcemaps in production to avoid eval
+    target: 'es2015',
+    rollupOptions: {
+      output: {
+        // Ensure no eval or Function constructor in output
+        manualChunks: undefined,
+      },
+    },
+  },
+  esbuild: {
+    // Ensure esbuild doesn't generate code with eval
+    legalComments: 'none',
+  },
 }));
