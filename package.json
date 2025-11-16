@@ -4,7 +4,7 @@
   "description": "![Owl](https://upload.wikimedia.org/wikipedia/commons/2/20/Bubo_bubo_1_%28Martin_Mecnarowski%29.jpg)",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cd backend && node server.js",
     "devStart": "cd backend && nodemon server.js"
   },
   "repository": {
