@@ -3,12 +3,12 @@ const cors = require('cors');
 const connectDB = require('./config/database');
 const sensorRoutes = require('./routes/sensor');
 require('dotenv').config();
-const cors = require("cors");
+
 const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "https://life-patrol.vercel.app",
+  origin: [process.env.FRONTEND_URL],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
