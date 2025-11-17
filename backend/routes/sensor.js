@@ -3,9 +3,9 @@ const router = express.Router();
 const Detection = require('../models/Detection');
 const User = require('../models/User');
 require('dotenv').config();
-
+const authenticate = require('../middleware/auth');
 // POST - Add new sensor reading
-router.post('/data', async (req, res) => {
+router.post('/data', authenticate, async (req, res) => {
   try {
     const newReading = new Detection(req.body);
     const savedReading = await newReading.save();
