@@ -6,6 +6,15 @@ import { DetectionCard } from "@/components/Dashboard/DetectionCard";
 import { SystemToggle } from "@/components/Dashboard/SystemToggle";
 import { SpeciesTagDialog } from "@/components/Dashboard/SpeciesTagDialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 import { Camera, AlertTriangle, Leaf, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { getDetections, getTags } from '@/lib/api';
@@ -17,10 +26,18 @@ const Index = () => {
   const [selectedDetection, setSelectedDetection] = useState<Detection | null>(null);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [filter, setFilter] = useState<DetectionCategory | "all">("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
 
   const filteredDetections = detections.filter(
     (d) => filter === "all" || d.category === filter
   );
+
+  // Pagination calculations
+  const totalPages = Math.ceil(filteredDetections.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedDetections = filteredDetections.slice(startIndex, endIndex);
 
   const wildlifeCount = detections.filter((d) => d.category === "wildlife").length;
   const intruderCount = detections.filter((d) => d.category === "intruder").length;
@@ -131,7 +148,10 @@ const Index = () => {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-2xl font-bold">Recent Detections</h2>
-            <Tabs value={filter} onValueChange={(v) => setFilter(v as DetectionCategory | "all")}>
+            <Tabs value={filter} onValueChange={(v) => {
+              setFilter(v as DetectionCategory | "all");
+              setCurrentPage(1); // Reset to first page when filter changes
+            }}>
               <TabsList>
                 <TabsTrigger value="all">All</TabsTrigger>
                 <TabsTrigger value="wildlife">Wildlife</TabsTrigger>
@@ -141,7 +161,7 @@ const Index = () => {
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {filteredDetections.map((detection) => (
+            {paginatedDetections.map((detection) => (
               <DetectionCard
                 key={detection._id}
                 detection={detection}
@@ -154,6 +174,70 @@ const Index = () => {
             <div className="text-center py-12 text-muted-foreground">
               No detections found for this filter
             </div>
+          )}
+
+          {/* Pagination Controls */}
+          {filteredDetections.length > 0 && totalPages > 1 && (
+            <Pagination className="mt-8">
+              <PaginationContent>
+                <PaginationItem>
+                  <PaginationPrevious
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage > 1) setCurrentPage(currentPage - 1);
+                    }}
+                    className={currentPage === 1 ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+
+                {/* Page Numbers */}
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+                  // Show first page, last page, current page, and pages around current
+                  const showPage =
+                    page === 1 ||
+                    page === totalPages ||
+                    (page >= currentPage - 1 && page <= currentPage + 1);
+
+                  const showEllipsisBefore = page === currentPage - 2 && currentPage > 3;
+                  const showEllipsisAfter = page === currentPage + 2 && currentPage < totalPages - 2;
+
+                  if (showEllipsisBefore || showEllipsisAfter) {
+                    return (
+                      <PaginationItem key={page}>
+                        <PaginationEllipsis />
+                      </PaginationItem>
+                    );
+                  }
+
+                  if (!showPage) return null;
+
+                  return (
+                    <PaginationItem key={page}>
+                      <PaginationLink
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setCurrentPage(page);
+                        }}
+                        isActive={currentPage === page}
+                        className="cursor-pointer"
+                      >
+                        {page}
+                      </PaginationLink>
+                    </PaginationItem>
+                  );
+                })}
+
+                <PaginationItem>
+                  <PaginationNext
+                    onClick={(e) => {
+                      e.preventDefault();
+                      if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+                    }}
+                    className={currentPage === totalPages ? "pointer-events-none opacity-50" : "cursor-pointer"}
+                  />
+                </PaginationItem>
+              </PaginationContent>
+            </Pagination>
           )}
         </div>
       </main>
