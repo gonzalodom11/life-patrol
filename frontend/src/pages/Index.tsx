@@ -18,6 +18,8 @@ import {
 import { Camera, AlertTriangle, Leaf, TrendingUp } from "lucide-react";
 import { toast } from "sonner";
 import { getDetections, getTags } from '@/lib/api';
+import { Footer } from "@/components/Footer";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 const Index = () => {
   const [detections, setDetections] = useState<Detection[]>([]);
@@ -110,6 +112,7 @@ const Index = () => {
                 </p>
               </div>
             </div>
+          <ThemeToggle />
           </div>
         </div>
       </header>
@@ -249,6 +252,7 @@ const Index = () => {
         onClose={() => setDialogOpen(false)}
         onSave={handleSaveSpecies}
       />
+      <Footer />
     </div>
   );
 };
