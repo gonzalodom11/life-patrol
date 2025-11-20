@@ -25,8 +25,6 @@ The platform aims to help local communities and researchers:
 
 - 🎯 **Motion detection** using PIR sensors and a camera.  
 - 📸 **Automatic image capture** on detection.  
-- 🧠 **Machine learning classification** (TensorFlow Lite):  
-  - *cat / dog / bird / human / unknown*  
 - ☁️ **Cloud data storage** (MongoDB) with metadata:  
   - timestamp, temperature, humidity, and classification results.  
 - 🗺️ **Interactive dashboard** with filters, graphs, and image gallery.  
@@ -44,7 +42,6 @@ The platform aims to help local communities and researchers:
 | **Backend** | Node.js, Express, MQTT (optional) |
 | **Database** | MongoDB (+ InfluxDB for time-series data) |
 | **Frontend** | React |
-| **ML / AI** | TensorFlow Lite (cat/dog/bird/human model) |
 
 ## 🌐 Sustainability Goals Alignment
 
