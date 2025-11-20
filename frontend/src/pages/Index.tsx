@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { mockDetections, mockSystemStatus } from "@/lib/mockData";
 import { Detection, DetectionCategory } from "@/types/detection";
 import { StatsCard } from "@/components/Dashboard/StatsCard";
@@ -15,13 +16,16 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Camera, AlertTriangle, Leaf, TrendingUp } from "lucide-react";
+import { Camera, AlertTriangle, Leaf, TrendingUp, LogOut } from "lucide-react";
 import { toast } from "sonner";
-import { getDetections, getTags } from '@/lib/api';
+import { getDetections, getSession, getTags, logout } from '@/lib/api';
 import { Footer } from "@/components/Footer";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { Button } from "@/components/ui/button";
+
 
 const Index = () => {
+  const navigate = useNavigate();
   const [detections, setDetections] = useState<Detection[]>([]);
   const [species, setSpecies] = useState<string[]>([]);
   const [systemStatus, setSystemStatus] = useState(mockSystemStatus);
@@ -63,12 +67,24 @@ const Index = () => {
   };
 
   useEffect(() => {
+    // Check if user is authenticated
+    getSession().then((session) => {
+      if (!session || !session.user) {
+        navigate("/auth");
+      }
+    });
+
     fetchDetections();
     getTags('wildlife')
       .then(setSpecies)
       .catch(err => console.error('Error retrieving species tags', err));
-  }, []);
+  }, [navigate]);
 
+  const handleLogout = async () => {
+    await logout();
+    toast.success("Logged out successfully");
+    navigate("/auth");
+  };
 
   const handleToggleSystem = (armed: boolean) => {
     setSystemStatus({ ...systemStatus, armed });
@@ -111,6 +127,18 @@ const Index = () => {
                   Smart Detection & Conservation Platform
                 </p>
               </div>
+              <div className="flex items-center gap-3">
+              <ThemeToggle />
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleLogout}
+                className="gap-2"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </Button>
+            </div>
             </div>
           <ThemeToggle />
           </div>

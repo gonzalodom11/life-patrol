@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const connectDB = require('./config/database');
 const sensorRoutes = require('./routes/sensor');
+const authRoutes = require('./routes/auth');
 require('dotenv').config();
 
 const app = express();
@@ -24,6 +25,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/sensor', sensorRoutes);
+app.use('/api/auth', authRoutes);
 
 // Start server
 const PORT = process.env.PORT ;

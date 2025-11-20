@@ -10,6 +10,88 @@ async function handleRes<T>(res: Response): Promise<T> {
   return res.json();
 }
 
+// Auth helper to get token from localStorage
+function getAuthHeaders(): HeadersInit {
+  const token = localStorage.getItem('auth_token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+// Authentication APIs
+export interface AuthUser {
+  id: string;
+  username: string;
+  email: string;
+  role: string;
+}
+
+export interface AuthResponse {
+  user: AuthUser;
+  token: string;
+  message?: string;
+}
+
+export interface SessionResponse {
+  user: AuthUser;
+}
+
+export async function signup(username: string, email: string, password: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE}/api/auth/signup`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password }),
+  });
+  const data = await handleRes<AuthResponse>(res);
+  // Store token in localStorage
+  if (data.token) {
+    localStorage.setItem('auth_token', data.token);
+  }
+  return data;
+}
+
+export async function login(email: string, password: string): Promise<AuthResponse> {
+  const res = await fetch(`${API_BASE}/api/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+  });
+  const data = await handleRes<AuthResponse>(res);
+  // Store token in localStorage
+  if (data.token) {
+    localStorage.setItem('auth_token', data.token);
+  }
+  return data;
+}
+
+export async function getSession(): Promise<SessionResponse | null> {
+  const token = localStorage.getItem('auth_token');
+  if (!token) {
+    return null;
+  }
+
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/session`, {
+      headers: getAuthHeaders(),
+    });
+    return await handleRes<SessionResponse>(res);
+  } catch (error) {
+    // If session is invalid, clear token
+    localStorage.removeItem('auth_token');
+    return null;
+  }
+}
+
+export async function logout(): Promise<void> {
+  localStorage.removeItem('auth_token');
+  await fetch(`${API_BASE}/api/auth/logout`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+}
+
+// Detection APIs
 export async function getDetections(): Promise<Detection[]> {
   const res = await fetch(`${API_BASE}/api/sensor/data`);
   return handleRes<Detection[]>(res);
@@ -42,6 +124,10 @@ export async function updateDetectionTags(detectionId: string, tags: string[]): 
 }
 
 export default {
+  signup,
+  login,
+  getSession,
+  logout,
   getDetections,
   getDetectionsByDevice,
   getLatestByDevice,
