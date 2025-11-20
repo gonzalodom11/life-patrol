@@ -4,12 +4,16 @@ const Detection = require('../models/Detection');
 const User = require('../models/User');
 require('dotenv').config();
 const authenticate = require('../middleware/auth');
+const classifyImageAsync = require('../imageClassification');
+
 // POST - Add new sensor reading
 router.post('/data', authenticate, async (req, res) => {
   try {
     const newReading = new Detection(req.body);
     const savedReading = await newReading.save();
     res.status(201).json(savedReading);
+    // background classification
+    classifyImageAsync(savedReading).catch(err => console.error('[AI]', err));
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

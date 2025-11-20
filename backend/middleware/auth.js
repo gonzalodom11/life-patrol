@@ -1,3 +1,5 @@
+const crypto = require('crypto');
+
 const authenticate = (req, res, next) => {
   const token = req.headers.authorization?.replace('Bearer ', '');
   
