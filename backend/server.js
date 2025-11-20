@@ -8,9 +8,11 @@ require('dotenv').config();
 const app = express();
 
 // Middleware
+const allowedOrigin = process.env.ALLOWED_ORIGIN
+
 app.use(cors({
-  origin: "*",
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  origin: allowedOrigin,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
