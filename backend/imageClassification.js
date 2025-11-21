@@ -14,6 +14,10 @@ module.exports = async function classifyImageAsync(detection) {
     categ = 'wildlife';
   }
   const confid = data?.predictions?.[0]?.confidence || 0;
+  if(pred === 'unknown'){
+  await Detection.findByIdAndUpdate(detection._id, { category: categ, confidence: confid * 100, tags: [] });
+  }
   await Detection.findByIdAndUpdate(detection._id, { category: categ, confidence: confid * 100, tags: [pred] });
+
   console.log('[AI] Predicted', pred);
 };
