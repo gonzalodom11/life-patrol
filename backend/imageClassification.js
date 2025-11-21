@@ -5,7 +5,7 @@ module.exports = async function classifyImageAsync(detection) {
   const response = await fetch(endpoint);
   if (!response.ok) throw new Error('Roboflow error ' + response.status);
   const data = await response.json();
-  const pred = data?.predictions?.[0]?.class || 'unknown';
+  const pred = data?.predictions?.[0]?.class || null;
   let categ = 'other';
   if(pred === 'human') {
     categ = 'intruder';
@@ -14,7 +14,7 @@ module.exports = async function classifyImageAsync(detection) {
     categ = 'wildlife';
   }
   const confid = data?.predictions?.[0]?.confidence || 0;
-  if(pred === 'unknown'){
+  if(pred === null || pred === 'unknown'){
   await Detection.findByIdAndUpdate(detection._id, { category: categ, confidence: confid * 100, tags: [] });
   }
   await Detection.findByIdAndUpdate(detection._id, { category: categ, confidence: confid * 100, tags: [pred] });
