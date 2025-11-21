@@ -127,7 +127,8 @@ const Index = () => {
                   Smart Detection & Conservation Platform
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+            </div>
+            <div className="flex items-center gap-3">
               <ThemeToggle />
               <Button
                 variant="outline"
@@ -139,8 +140,6 @@ const Index = () => {
                 Logout
               </Button>
             </div>
-            </div>
-          <ThemeToggle />
           </div>
         </div>
       </header>
