@@ -10,6 +10,8 @@ const app = express();
 // Middleware
 const allowedOrigin = process.env.ALLOWED_ORIGIN
 
+app.use(express.json()); // Parse JSON bodies
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", allowedOrigin);
   res.header("Access-Control-Allow-Credentials", "true");
@@ -21,6 +23,7 @@ app.use((req, res, next) => {
   }
   next();
 });
+
 // Connect to MongoDB Atlas
 connectDB();
 
