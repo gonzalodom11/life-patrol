@@ -66,7 +66,7 @@ export const DetectionCard = ({ detection, onTagSpecies }: DetectionCardProps) =
           </div>
         )}
 
-        {detection.tags.length === 0 && detection.category === "wildlife" && (
+        {(detection.tags === null || (detection.tags.length === 0 && detection.category === "wildlife")) && (
           <Button
             variant="outline"
             size="sm"
